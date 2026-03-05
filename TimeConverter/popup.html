@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time Converter</title>
+    <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+    <div class="container">
+        <!-- Toast -->
+        <div id="copy-toast" class="copy-toast hidden">
+            <span class="toast-icon">✓</span>
+            <span id="toast-message">Copied!</span>
+        </div>
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <h1>🕐 Time Converter</h1>
+                <button id="theme-toggle" class="theme-toggle" title="Toggle theme">☀️</button>
+            </div>
+            <p class="subtitle">World clocks &amp; time zone converter</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="clocks">World Clocks</button>
+            <button class="tab" data-tab="converter">Converter</button>
+            <button class="tab" data-tab="diff">Time Diff</button>
+        </nav>
+
+        <!-- World Clocks Tab -->
+        <section id="clocks-tab" class="tab-content active">
+            <div class="local-time-card">
+                <span class="label">Your Local Time</span>
+                <span id="local-time" class="big-time">--:--:--</span>
+                <span id="local-zone" class="zone-label"></span>
+            </div>
+
+            <div id="world-clocks" class="clocks-grid"></div>
+
+            <div class="add-zone">
+                <select id="add-zone-select">
+                    <option value="">+ Add a time zone…</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Converter Tab -->
+        <section id="converter-tab" class="tab-content">
+            <div class="converter-form">
+                <!-- Input Type Selector -->
+                <div class="form-group">
+                    <label>Input Type</label>
+                    <div class="input-type-pills">
+                        <button class="pill active" data-type="smart">Smart Paste</button>
+                        <button class="pill" data-type="millis">Millis</button>
+                        <button class="pill" data-type="epoch">Epoch (s)</button>
+                        <button class="pill" data-type="date">Date</button>
+                        <button class="pill" data-type="datetime">DateTime</button>
+                    </div>
+                </div>
+
+                <!-- Smart Paste Input -->
+                <div class="form-group input-panel" id="panel-smart">
+                    <label for="input-smart">Paste any time value</label>
+                    <textarea id="input-smart" class="smart-textarea" rows="2"
+                        placeholder="Paste anything: 1709472000000, 2026-03-03T14:30:00Z, Mar 3 2026 2:30 PM, Tue 03 Mar 2026 14:30:00 +0530, 03/03/2026, 2 hours ago…"></textarea>
+                    <div id="detected-format" class="detected-format hidden"></div>
+                </div>
+
+                <!-- Millis Input -->
+                <div class="form-group input-panel hidden" id="panel-millis">
+                    <label for="input-millis">Milliseconds (Unix ms)</label>
+                    <input type="text" id="input-millis" placeholder="e.g. 1709472000000" inputmode="numeric" />
+                    <button class="btn-now" id="btn-now-millis" title="Use current time">Now</button>
+                </div>
+
+                <!-- Epoch Input -->
+                <div class="form-group input-panel hidden" id="panel-epoch">
+                    <label for="input-epoch">Epoch (Unix seconds)</label>
+                    <input type="text" id="input-epoch" placeholder="e.g. 1709472000" inputmode="numeric" />
+                    <button class="btn-now" id="btn-now-epoch" title="Use current time">Now</button>
+                </div>
+
+                <!-- Date Input -->
+                <div class="form-group input-panel hidden" id="panel-date">
+                    <label for="input-date">Date</label>
+                    <input type="date" id="input-date" />
+                    <div class="form-subgroup">
+                        <label for="input-zone-date">Time Zone</label>
+                        <select id="input-zone-date"></select>
+                    </div>
+                </div>
+
+                <!-- DateTime Input -->
+                <div class="form-group input-panel hidden" id="panel-datetime">
+                    <label for="input-dt-date">Date</label>
+                    <input type="date" id="input-dt-date" />
+                    <label for="input-dt-time" class="mt-8">Time</label>
+                    <input type="time" id="input-dt-time" step="1" />
+                    <div class="form-subgroup">
+                        <label for="input-zone-datetime">Source Time Zone</label>
+                        <select id="input-zone-datetime"></select>
+                    </div>
+                </div>
+
+                <button id="convert-btn" class="btn-primary">Convert</button>
+            </div>
+
+            <!-- Conversion History -->
+            <div id="history-section" class="history-section">
+                <div class="history-header" id="history-header">
+                    <span>🕘 Recent</span>
+                    <span class="history-toggle" id="history-toggle">▼</span>
+                </div>
+                <div id="history-list" class="history-list hidden"></div>
+            </div>
+
+            <!-- Parsed Info Card -->
+            <div id="parsed-info" class="parsed-info-card hidden"></div>
+
+            <!-- Pinned Zones Selector -->
+            <div id="pinned-zones-selector" class="pinned-selector hidden">
+                <div class="pinned-header">
+                    <span class="pinned-title">📌 Pinned Zones</span>
+                    <button id="pinned-edit-btn" class="pinned-edit-btn">Edit</button>
+                </div>
+                <div id="pinned-edit-panel" class="pinned-edit-panel hidden">
+                    <input type="text" id="pinned-search" class="pinned-search" placeholder="Search zones…" />
+                    <div id="pinned-checkboxes" class="pinned-checkboxes"></div>
+                </div>
+            </div>
+
+            <!-- Copy Actions Bar -->
+            <div id="copy-actions" class="copy-actions hidden">
+                <button id="copy-pinned-btn" class="copy-action-btn" title="Copy pinned zones">
+                    <span class="copy-icon">📋</span> Copy Pinned
+                </button>
+                <button id="copy-all-btn" class="copy-action-btn" title="Copy all zones">
+                    <span class="copy-icon">📄</span> Copy All
+                </button>
+                <div class="copy-format-container">
+                    <select id="copy-format" class="copy-format-select" title="Copy format">
+                        <option value="table">Table</option>
+                        <option value="inline">Inline</option>
+                        <option value="slack">Slack/Chat</option>
+                        <option value="csv">CSV</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Results Search -->
+            <div id="results-search-bar" class="results-search-bar hidden">
+                <input type="text" id="results-search" class="results-search" placeholder="🔍 Search zones…" />
+            </div>
+
+            <div id="conversion-results" class="results-list"></div>
+
+            <!-- Collapsed toggle -->
+            <button id="toggle-collapsed" class="toggle-collapsed-btn hidden"></button>
+        </section>
+
+        <!-- Time Diff Tab -->
+        <section id="diff-tab" class="tab-content">
+            <div class="converter-form">
+                <div class="form-group">
+                    <label for="diff-input-a">Start Time</label>
+                    <textarea id="diff-input-a" class="smart-textarea" rows="2"
+                        placeholder="Paste any time value…"></textarea>
+                    <div id="diff-detected-a" class="detected-format hidden"></div>
+                </div>
+                <div class="form-group">
+                    <label for="diff-input-b">End Time</label>
+                    <textarea id="diff-input-b" class="smart-textarea" rows="2"
+                        placeholder="Paste any time value…"></textarea>
+                    <div id="diff-detected-b" class="detected-format hidden"></div>
+                </div>
+                <button id="diff-btn" class="btn-primary">Calculate Difference</button>
+            </div>
+            <div id="diff-result" class="diff-result-card hidden"></div>
+        </section>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
