@@ -1,7 +1,94 @@
 [README.md](https://github.com/user-attachments/files/25760378/README.md)
 # 🕐 Time Converter — Chrome Extension
 
-A powerful Chrome extension for converting timestamps and viewing world clocks across 20 time zones. Built with vanilla JavaScript, HTML, and CSS — no frameworks, no dependencies.
+A powerful Chrome extension for converting timestamps and viewing world clocks across 48 time zones. Built with vanilla JavaScript, HTML, and CSS — no frameworks, no dependencies.
+
+>_Basically I am watch mechanic, Enaku ithulam sarva satharanam ;)_
+
+---
+
+## 🚀 Installation
+
+### Option 1: Clone from GitHub
+
+```bash
+git clone https://github.com/Rabi-benadict/Mani-24-TimeService.git
+```
+
+### Option 2: Download ZIP
+
+1. Go to the [GitHub repository](https://github.com/Rabi-benadict/Mani-24-TimeService)
+2. Click the green **Code** button → **Download ZIP**
+3. Extract the ZIP to a folder on your computer
+
+### Load into Chrome
+
+1. Open Chrome and go to `chrome://extensions/`
+2. Enable **Developer mode** (toggle in the top-right corner)
+3. Click **Load unpacked**
+4. Select the `TimeConverter` folder (the one containing `manifest.json`)
+5. The extension icon appears in your toolbar — click the **puzzle piece** 🧩 icon and **pin** it for quick access
+
+> **Tip:** After pulling updates (`git pull`), click the ↻ reload button on the extension card at `chrome://extensions/` to apply changes.
+
+### Set Up Keyboard Shortcut (optional)
+
+1. Go to `chrome://extensions/shortcuts`
+2. Find **Time Converter** → **Open Time Converter**
+3. Default: `Cmd+Shift+M` (Mac) / `Ctrl+Shift+M` (Windows/Linux)
+4. Click the pencil icon to customize if needed
+
+---
+
+## 📖 How to Use
+
+### 🌍 World Clocks (Tab 1)
+
+1. Open the extension — you'll see your **local time** at the top
+2. Below that are your selected **world clocks** updating every second
+3. **Add a zone**: Use the dropdown at the bottom → "Add a time zone…"
+4. **Remove a zone**: Hover over a clock card → click the **×** button
+5. Your selection is saved and synced across devices
+
+### 🔄 Converter (Tab 2)
+
+1. Switch to the **Converter** tab
+2. **Smart Paste** (default): Paste any timestamp into the text area — it auto-detects the format
+   - Examples: `1709472000000`, `2026-03-03T14:30:00Z`, `26/02/2026 15:11:58`, `2 hours ago`
+   - A green badge shows the detected format
+   - Press **Enter** to convert
+3. **Other input types**: Click the pills to switch — **Millis**, **Epoch (s)**, **Date**, **DateTime**
+4. Click **Convert** → see the time in all zones
+5. **Pinned zones** appear expanded at the top; others are collapsed below
+   - Click "Edit" on the pinned section to add/remove pinned zones
+   - Use the search box to find zones quickly
+6. **Search results**: Use the 🔍 search bar above results to filter by zone name
+7. **Copy**: 
+   - Hover any row → click 📋 to copy that single zone
+   - Use **Copy Pinned** / **Copy All** buttons with format selector (Table, Inline, Slack, CSV)
+8. **History**: Click "🕘 Recent" to see last 10 conversions — click any to reconvert
+
+### ⏱ Time Diff (Tab 3)
+
+1. Switch to the **Time Diff** tab
+2. Paste a **Start Time** and **End Time** (any format Smart Paste supports)
+3. Click **Calculate Difference**
+4. See the duration in days/hours/minutes/seconds, plus totals in milliseconds, seconds, hours, and days
+
+### 📋 Right-Click Context Menu
+
+1. On any webpage, **select** a timestamp text (e.g., highlight `1709472000000`)
+2. **Right-click** → click **"Convert '...' with Time Converter"**
+3. A blue badge `1` appears on the extension icon
+4. **Click the extension icon** → it auto-opens the Converter with your text and shows results
+
+> **Note:** The context menu only works on regular webpages, not on Chrome internal pages like `chrome://extensions`.
+
+### 🎨 Theme Toggle
+
+- Click the **☀️** / **🌙** button in the top-right corner of the header
+- Switches between dark and light themes
+- Your preference is saved and synced
 
 ---
 
@@ -203,16 +290,6 @@ isDST(date, timeZone)
   ├─ Get current date's offset
   └─ If current offset ≠ standard (minimum) offset → DST active → true
 ```
-
----
-
-## 🚀 Installation
-
-1. Clone or download this folder
-2. Open Chrome → `chrome://extensions/`
-3. Enable **Developer mode** (top-right toggle)
-4. Click **Load unpacked** → Select the `TimeConverter` folder
-5. Pin the extension to your toolbar for quick access
 
 ---
 
